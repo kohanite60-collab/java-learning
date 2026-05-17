@@ -1,5 +1,6 @@
 package org.example.gpt.controller;
 
+import org.example.gpt.common.Result;
 import org.example.gpt.entity.user;
 import org.example.gpt.service.userservice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,18 @@ public class hellocontroller {
     private userservice userservice;
 
     @GetMapping("/users")
-    public List<user> list() {
-        return userservice.list();
+    public Result<List<user>> list() {
+        return Result.success(userservice.list());
     }
     @GetMapping("/user")
-    public user get(String name) {
-        return userservice.get(name);
+    public Result<user> get(String name) {
+
+        return Result.success(userservice.get(name));
     }
     @PostMapping("/user")
-    public int add(@RequestBody user user) {
-        return userservice.add(user) ;
+    public Result add(@RequestBody user user) {
+
+        userservice.add( user);
+        return Result.success("添加成功") ;
     }
 }
