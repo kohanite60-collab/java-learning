@@ -1,6 +1,98 @@
+<!DOCTYPE html>
 <html>
+<head>
+    <meta charset="UTF-8">
+    <title>简易贴吧</title>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <style>
+        body {
+          font-family: Arial;
+          padding: 20px;
+          background: #f5f5f5;
+        }
+
+        .box {
+          background: white;
+          padding: 15px;
+          margin-bottom: 10px;
+          border-radius: 10px;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        input {
+          padding: 6px;
+          width: 200px;
+          margin-right: 10px;
+        }
+
+        button {
+          padding: 6px 10px;
+          cursor: pointer;
+        }
+    </style>
+</head>
+
 <body>
-<h1>hello word!!!</h1>
-<p>this is a html page</p>
+
+<div id="app">
+
+    <h2>📚 简易贴吧</h2>
+
+    <!-- 搜索 -->
+    <input v-model="title" placeholder="输入标题搜索">
+    <button @click="search">搜索</button>
+    <button @click="load">刷新</button>
+
+    <hr>
+
+    <!-- 列表 -->
+    <div v-for="item in list" :key="item.id" class="box">
+        <h3>标题：{{ item.title }}</h3>
+        <p>内容：{{ item.content }}</p>
+    </div>
+
+</div>
+
+<script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          list: [],
+          title: ""
+        }
+      },
+
+      methods: {
+
+        // 查全部
+        load() {
+          fetch("http://10.134.39.176:8080/posts")
+            .then(res => res.json())
+            .then(res => {
+              this.list = res.data;
+            });
+        },
+
+        // 按标题查
+        search() {
+          fetch("http://10.134.39.176:8080/posts/search?title=" + this.title)
+            .then(res => res.json())
+            .then(res => {
+              this.list = res.data;
+            });
+        }
+      },
+
+      mounted() {
+        this.load();
+      }
+
+    }).mount("#app");
+</script>
+
 </body>
 </html>

@@ -10,3 +10,7 @@ mybatis:
   type-aliases-package: org.example.gpt.entity
   configuration:
     map-underscore-to-camel-case: true
+
+server:
+  port: 8080
+  address: 0.0.0.0
